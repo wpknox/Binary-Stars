@@ -36,7 +36,7 @@ test_api:
   script:
     - cd API
     - chmod +x manage.py
-    - ./manage.py test
+    - python manage.py test
 
 
 
