@@ -44,5 +44,15 @@ def binarystars_detail(request, pk):
 @api_view(['GET'])
 def binarystars_cluster(request):
     if request.method == 'GET':
-        clust = cluster.get_stars(3)
+        cluster_by = ['mass_diff', 'lumin_diff', 'porb'] #default values
+        clust = cluster.get_stars(3, cluster_by)
+        return JsonResponse(clust, safe=False)
+
+@api_view(['POST'])
+def binarystars_choicecluster(request):
+    if request.method == 'POST':
+        req = JSONParser().parse(request)
+        print(req)
+        cluster_by = req.get("cluster_by")
+        clust = cluster.get_stars(3, cluster_by)
         return JsonResponse(clust, safe=False)
