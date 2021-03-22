@@ -4,5 +4,5 @@ from binarystars import views
 urlpatterns = [ 
     url(r'^api/binarystars$', views.binarystars_list),
     url(r'^api/binarystars/(?P<pk>[0-9]+)$', views.binarystars_detail),
-    url(r'^api/binarystars/cluster$', views.binarystars_cluster)
+    url(r'^api/binarystars/cluster/(?P<clusterMethod>\w+)/(?P<numClusters>[0-9]+)$', views.binarystars_cluster)
 ]

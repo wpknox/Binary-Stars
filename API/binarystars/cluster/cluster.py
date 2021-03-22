@@ -10,7 +10,6 @@ DATA_PROCESSORS = {
     "standard": preprocessing.StandardScaler()
 }
 
-
 def preprocess_data(data: np.ndarray, standarizer: str) -> np.ndarray:
     return DATA_PROCESSORS[standarizer].fit_transform(data)
 

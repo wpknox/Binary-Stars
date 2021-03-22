@@ -38,7 +38,12 @@ def binarystars_detail(request, pk):
         return JsonResponse(binarystar_serializer.data, safe=False) 
 
 @api_view(['GET'])
-def binarystars_cluster(request):
+def binarystars_cluster(request, clusterMethod, numClusters):
+    numClusters = int(numClusters)
+
+    if clusterMethod != 'kmeans' and clusterMethod != 'dbscan':
+        return JsonResponse('Bad cluster method', safe=False, status=status.HTTP_400_BAD_REQUEST)
+
     if request.method == 'GET':
-        clust = cluster.get_stars(3)
+        clust = cluster.get_stars(numClusters, cluster_type=clusterMethod)
         return JsonResponse(clust, safe=False)
