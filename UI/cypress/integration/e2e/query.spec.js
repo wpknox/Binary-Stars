@@ -1,5 +1,6 @@
 
 describe('Submit a basic query | Happy path', () => {
+
   it('Loads the home page', () => {
     cy.visit('http://localhost:8081/')
 
@@ -22,19 +23,35 @@ describe('Submit a basic query | Happy path', () => {
   })
 
   it('Select Attributes', () => {
-    //TODO
+    cy.get('.mat-list-text').contains('Luminosity').click()
+    cy.get('.mat-list-text').contains('Radius').click()
+    cy.get('.mat-list-text').contains('Effective Temperature').click()
+    cy.get('.mat-raised-button').contains('arrow_forward').click()
+
+    cy.get('.mat-stepper-next').contains('Next').click({force: true})
   })
 
   it('Select Weights', () => {
-    //TODO
+    cy.get('.cy-weight-0').type('34')
+    cy.get('.cy-weight-1').type('34')
+    cy.get('.cy-weight-2').type('32')
+
+    cy.get('.mat-stepper-next').contains('Next').click({force: true})
   })
 
   it('Choose Clustering Method', () => {
-    //TODO
+    cy.get('.cy-cluster-method-select').click()
+    cy.get('.cy-cluster-method-option').contains('K-Means').click()
+
+    cy.get('.mat-stepper-next').contains('Next').click({force: true})
   })
 
   it('Set Parameters and Data Processor', () => {
-    //TODO
+    cy.get('.cy-cluster-num').type('4')
+    cy.get('.cy-data-processor-select').click()
+    cy.get('.cy-data-processor-option').contains('MinMax').click()
+
+    cy.get('.mat-stepper-next').contains('Next').click({force: true})
   })
 
   it('Temporal Values', () => {
@@ -42,6 +59,13 @@ describe('Submit a basic query | Happy path', () => {
   })
 
   it('Review and Submit', () => {
-    //TODO
+    cy.server()
+    cy.route('POST', '**/api/binarystars/cluster').as('cluster')
+
+    cy.get('.cy-submit-query').click()
+
+    cy.wait('@cluster', {timeout: 20000})
+
+    cy.get('.cy-3D-graph').should('be.visible')
   })
 })

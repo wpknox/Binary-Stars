@@ -67,22 +67,22 @@
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Set Parameters & Data Processor</ng-template>
-          <app-clusterparams 
-            [clusterControl]="query.get('n_clusters')" 
+          <app-clusterparams
+            [clusterControl]="query.get('n_clusters')"
             [sampleControl]="query.get('n_samples')"
-            [epsControl]="query.get('eps')" 
+            [epsControl]="query.get('eps')"
             [standardizerControl]="query.get('standardizer')"
             [clusterType]="query.get('algorithm').value">
-          
+
           </app-clusterparams>
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button 
-            mat-raised-button 
-            matStepperNext 
-            color="primary" 
-            (click)="this.request = buildRequestTemplate(); print();" 
-            matStepperNext type="button" 
+            <button
+            mat-raised-button
+            matStepperNext
+            color="primary"
+            (click)="this.request = buildRequestTemplate(); print();"
+            matStepperNext type="button"
             [disabled]="false">
               Next
             </button>
@@ -94,7 +94,7 @@
           <div>
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-button (click)="stepper.reset()">Reset</button>
-            <a mat-button type="submit" (click)="onSubmit()">Submit</a>
+            <a mat-button type="submit" (click)="onSubmit()" class="cy-submit-query">Submit</a>
           </div>
         </mat-step>
       </mat-vertical-stepper>
