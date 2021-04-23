@@ -23,6 +23,8 @@ export class GraphComponent implements OnInit {
   public GraphTypeEnum = GraphType;
 
   public badRequest: boolean = false;
+  public timestep: number = 0;
+  public timestep_message: string = ":)";
 
   constructor(
     private queryService: QueryService,
@@ -151,6 +153,16 @@ export class GraphComponent implements OnInit {
       });
   }
 
+  timestepChange(): void {
+    if( this.timestep < this.clusteredData.time_range[0] || this.timestep > this.clusteredData.time_range[1] ) {
+      this.timestep_message = `Bad timestep, enter a number in the following range [${this.clusteredData.time_range[0]},${this.clusteredData.time_range[1]}]`;
+    } else {
+      this.clusteredData.timestep = this.timestep;
+      this.timestep_message = ':)';
+      this.set3DGraphNoTime();
+    }
+  }
+
   configureGraph(): void {
     let dialogRef = this.dialog.open(ConfigureGraphComponent, {
       data: {
@@ -162,7 +174,10 @@ export class GraphComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data) => {
       this.clusteredData.graphType = data['graphType'];
       this.clusteredData.setSelectedAttributes(data['attrs']);
-      if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
+      console.log(this.clusteredData.selectedAttributes);
+      if (this.clusteredData.graphType == GraphType.Graph_3_Attr) {
+        this.set3DGraphNoTime();
+      } else if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
         this.set3DGraph();
       } else if ( this.clusteredData.graphType == GraphType.Graph_1_Attr ) {
         this.set2DGraph()
@@ -170,7 +185,16 @@ export class GraphComponent implements OnInit {
     });
   }
 
+  set3DGraphNoTime() {
+    this.graph3D.layout.title = '3 Attribute Visualization';
+    this.graph3D['data'] = this.clusteredData.getGraphData();
+    this.graph3D.layout.scene.xaxis.title.text = this.clusteredData.selectedAttributes[0];
+    this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[1];
+    this.graph3D.layout.scene.zaxis.title.text = this.clusteredData.selectedAttributes[2];
+  }
+
   set3DGraph() {
+    this.graph3D.layout.title = '2 Attribute Visualization';
     this.graph3D['data'] = this.clusteredData.getGraphData();
     this.graph3D.layout.scene.xaxis.title.text = 'time';
     this.graph3D.layout.scene.yaxis.title.text = this.clusteredData.selectedAttributes[0];
