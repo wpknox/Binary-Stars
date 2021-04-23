@@ -40,9 +40,19 @@ export class QuerySummaryComponent implements OnInit {
         return this.request?.cluster_type == null ? "Undefined" : this.clusterMethod;
       case "database":
         return this.request?.database == null ? "Undefined" : this.request.database;
+      case 'temporal_val':
+        return (this.request?.time_steps == null) || (this.request?.starting_time_step == null)? 0 : this.timeStepString;
       default:
         return "Undefined";
     }
+  }
+
+  get timeStepString(): string {
+    return this.useTimeStepRange ? 'min:  ' + this.request?.starting_time_step + '   |   max:  ' + this.request?.time_steps  : '' + this.request?.time_steps;
+  }
+
+  get useTimeStepRange(): boolean {
+    return this.request?.time_steps != this.request?.starting_time_step;
   }
 
   get clusterMethod(): string {

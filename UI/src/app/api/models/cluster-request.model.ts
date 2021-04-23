@@ -6,8 +6,9 @@ export interface IClusterRequest {
   cluster_type: ClusterType; //Cluster type is required
   time_steps: number; // Specifies the number of time steps to cluster
   attributes: any; // { 'db_name': weight.00 }
-  database?: Database; //Should make this and temporal_val non-null once it's working on backend
-  temporal_val?: any;
+  database?: Database;
+  time_interval?: any;
+  starting_time_step: number;
 }
 
 export enum ClusterType {
@@ -28,6 +29,5 @@ export enum DataProcessors {
 
 export enum Database {
   COSMIC = 'COSMIC',
-  DB2 = 'Database #2',
-  DB3 = 'Database #3',
+  POSYDON  = 'POSYDON ',
 }
