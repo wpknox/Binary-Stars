@@ -42,16 +42,16 @@ export class StepperComponent implements OnInit {
       eps: [null, [Validators.required, Validators.min(0)]],
       standardizer: [DataProcessors.Standard],
       temporal_val: [
-        {value: null, disabled: false}, 
+        {value: null, disabled: false},
         { validators: [
-          Validators.required, 
+          Validators.required,
           Validators.compose([Validators.min(0), Validators.max(100)])]
         }],
       time_interval: this.fb.array(
         [this.fb.control({value: null, disabled: true}, [
           Validators.required,
           Validators.compose([Validators.min(0), Validators.max(100)])
-        ]), 
+        ]),
         this.fb.control({value: null, disabled: true}, [
           Validators.required,
           Validators.compose([Validators.min(0), Validators.max(100)])
@@ -84,18 +84,24 @@ export class StepperComponent implements OnInit {
       } else {
         attributes[at] = this.weights.controls[index].value / 100;
       }
-      
+
     }
 
     let steps = {};
     if (this.query.get('cluster_params').get('temporal_val').enabled) {
-      steps['min'] = steps['max'] = this.query.get('cluster_params').get('temporal_val').value;
+      steps['min'] = this.query.get('cluster_params').get('temporal_val').value;
+      steps['max'] = 1;
       /* steps['min'] = 0;
       steps['max'] = this.query.get('temporal_val').value; */
     } else {
       steps['min'] = this.query.get('cluster_params').get('time_interval').value[0];
-      steps['max'] = this.query.get('cluster_params').get('time_interval').value[1];
+      steps['max'] = this.query.get('cluster_params').get('time_interval').value[1] - steps['min'];
     } //Need to double check how backend needs the time steps to be sent
+
+    //if the user adds bad input, just do a single timestep
+    if( steps['max'] < steps['min'] ){
+      steps['min'] = steps['max'] = 1;
+    }
 
     this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,

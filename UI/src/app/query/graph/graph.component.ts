@@ -23,7 +23,7 @@ export class GraphComponent implements OnInit {
   public GraphTypeEnum = GraphType;
 
   public badRequest: boolean = false;
-  public timestep: number = 0;
+  public timestep: number;
   public timestep_message: string = ":)";
 
   constructor(
@@ -150,6 +150,7 @@ export class GraphComponent implements OnInit {
         }
         this.clusteredData = new ClusteredData(response);
         this.set3DGraph();
+        this.timestep = this.clusteredData.timestep + this.clusteredData.time_range[0];
       });
   }
 
@@ -157,7 +158,7 @@ export class GraphComponent implements OnInit {
     if( this.timestep < this.clusteredData.time_range[0] || this.timestep > this.clusteredData.time_range[1] ) {
       this.timestep_message = `Bad timestep, enter a number in the following range [${this.clusteredData.time_range[0]},${this.clusteredData.time_range[1]}]`;
     } else {
-      this.clusteredData.timestep = this.timestep;
+      this.clusteredData.timestep = this.timestep - this.clusteredData.time_range[0];
       this.timestep_message = ':)';
       this.set3DGraphNoTime();
     }

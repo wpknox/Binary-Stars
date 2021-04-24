@@ -18,7 +18,7 @@ export class ClusteredData {
 
   jsonData: ClusterBinaryStar[][];
   public graphType: GraphType = 0;
-  public timestep: number = 0;
+  public timestep: number;
   public time_range: number[] = [0,0];
 
   constructor(jsonData: ClusterBinaryStarTimesteps) {
@@ -38,7 +38,9 @@ export class ClusteredData {
     }
     this.numClusters++;
 
-    //TODO: Add in timestep and timerange
+    this.timestep = 0;
+    this.time_range[0] = jsonData.start_ts;
+    this.time_range[1] = jsonData.start_ts + this.jsonData.length - 1;
 
     //Set to 2 attribute graph by default
     this.graphType = GraphType.Graph_2_Attr;

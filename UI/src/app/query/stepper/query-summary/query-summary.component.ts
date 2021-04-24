@@ -48,7 +48,7 @@ export class QuerySummaryComponent implements OnInit {
   }
 
   get timeStepString(): string {
-    return this.useTimeStepRange ? 'min:  ' + this.request?.starting_time_step + '   |   max:  ' + this.request?.time_steps  : '' + this.request?.time_steps;
+    return this.useTimeStepRange ? 'min:  ' + this.request?.starting_time_step + '   |   max:  ' + (this.request?.time_steps + this.request?.starting_time_step)  : '' + this.request?.time_steps;
   }
 
   get useTimeStepRange(): boolean {

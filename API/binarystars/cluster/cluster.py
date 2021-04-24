@@ -8,11 +8,11 @@ import binarystars.cluster.clusteredstar as cstar
 
 MAX_ROWS = 1001 # might have to change this to be a calculation like what is done in interpolate.py
 LOWER_SEED_BOUND = 1
-UPPER_SEED_BOUND = 2147483648 # 2^31 .. just using a number that is high to try and get a good amount of 
+UPPER_SEED_BOUND = 2147483648 # 2^31 .. just using a number that is high to try and get a good amount of
 
 DATA_PROCESSORS = {
     "minmax": preprocessing.MinMaxScaler(),
-    
+
     "abs": preprocessing.MaxAbsScaler(),
     "standard": preprocessing.StandardScaler()
 }
@@ -25,7 +25,7 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
 
     if not standardizer:
         standardizer = 'standard'
-    
+
     # user will give 1-indexed value. Need to convert to 0 indexed before doing anything else.
     start_ts = start_ts - 1
     end_ts = start_ts + time_steps
@@ -33,20 +33,20 @@ def get_stars(n_clusters: int=None, n_samples: int=None, eps: float=None, standa
                                                             time_id_mod__range=(start_ts, end_ts - 1)).order_by('time_id')
     """
         This is equivalent to the following SQL query:
-        
+
         SELECT * FROM interpolated_binary_stars
         WHERE MOD(time_id - 1, 1001) BETWEEN $start_ts AND $end_ts - 1
         ORDER BY time_id;
-        
+
         This gets all of the wanted stars and the desired time steps for each star in the table
         We have to use 'time_id - 1' because time_id starts at 1 instead of 0.
     """
-    
+
     attribute_list = list(attributes.keys())
     weights = np.array([attributes[key] for key in attributes])
 
     seed = randint(LOWER_SEED_BOUND, UPPER_SEED_BOUND)
-    clustered_times = {'timesteps': []}
+    clustered_times = {'timesteps': [], 'start_ts': start_ts}
     # cluster multiple times. Each time step will line up between the stars!! Yay!
     # when 'time_steps' is large, this will be slow!!
     for i in range(time_steps):
