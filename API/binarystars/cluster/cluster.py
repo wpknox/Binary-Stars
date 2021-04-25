@@ -8,11 +8,10 @@ import binarystars.cluster.clusteredstar as cstar
 
 MAX_ROWS = 1001 # might have to change this to be a calculation like what is done in interpolate.py
 LOWER_SEED_BOUND = 1
-UPPER_SEED_BOUND = 2147483648 # 2^31 .. just using a number that is high to try and get a good amount of 
+UPPER_SEED_BOUND = 2147483648 # 2^31 .. just using a number that is high to try and get a good amount of seeds
 
 DATA_PROCESSORS = {
     "minmax": preprocessing.MinMaxScaler(),
-    
     "abs": preprocessing.MaxAbsScaler(),
     "standard": preprocessing.StandardScaler()
 }
