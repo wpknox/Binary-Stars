@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap } from 'rxjs/operators';
-import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/models/clustered-binary-star.model';
+import {
+  ClusterBinaryStar,
+  ClusterBinaryStarTimesteps,
+} from 'src/app/api/models/clustered-binary-star.model';
 import { IClusterRequest } from 'src/app/api/models/cluster-request.model';
 import { QueryService } from '../../api/query.service';
 import { ClusteredData, GraphType } from './clusteredData';
@@ -47,7 +50,7 @@ export class GraphComponent implements OnInit {
             text: '',
             font: {
               size: 20,
-            }
+            },
           },
           type: 'linear',
           zeroline: false,
@@ -57,7 +60,7 @@ export class GraphComponent implements OnInit {
             text: '',
             font: {
               size: 20,
-            }
+            },
           },
           type: 'linear',
           zeroline: false,
@@ -99,7 +102,7 @@ export class GraphComponent implements OnInit {
               text: '',
               font: {
                 size: 20,
-              }
+              },
             },
             type: 'linear',
             zeroline: false,
@@ -109,7 +112,7 @@ export class GraphComponent implements OnInit {
               text: '',
               font: {
                 size: 20,
-              }
+              },
             },
             type: 'linear',
             zeroline: false,
@@ -119,7 +122,7 @@ export class GraphComponent implements OnInit {
               text: '',
               font: {
                 size: 20,
-              }
+              },
             },
             type: 'linear',
             zeroline: false,
@@ -134,11 +137,8 @@ export class GraphComponent implements OnInit {
   getBackendDataTest(): void {
     this.route.queryParams
       .pipe(
-        concatMap((queryParams) =>
-          this.queryService.fromQueryParamsAsync(queryParams)
-        ),
-        concatMap((body: IClusterRequest) => {
-          return this.queryService.postQuery(body);
+        concatMap((params: any) => {
+          return this.queryService.getCluster(params.queryId);
         })
       )
       .subscribe((response: ClusterBinaryStarTimesteps) => {
@@ -150,15 +150,15 @@ export class GraphComponent implements OnInit {
         }
         this.clusteredData = new ClusteredData(response);
         this.set3DGraph();
-        this.timestep = this.clusteredData.timestep + this.clusteredData.time_range[0];
+        this.timestep = this.clusteredData.timestep + this.clusteredData.time_range[0] + 1;
       });
   }
 
   timestepChange(): void {
-    if( this.timestep < this.clusteredData.time_range[0] || this.timestep > this.clusteredData.time_range[1] ) {
-      this.timestep_message = `Bad timestep, enter a number in the following range [${this.clusteredData.time_range[0]},${this.clusteredData.time_range[1]}]`;
+    if( this.timestep < (this.clusteredData.time_range[0] + 1) || (this.timestep > this.clusteredData.time_range[1] + 1) ) {
+      this.timestep_message = `Bad timestep, enter a number in the following range [${(this.clusteredData.time_range[0] + 1)},${(this.clusteredData.time_range[1] + 1)}]`;
     } else {
-      this.clusteredData.timestep = this.timestep - this.clusteredData.time_range[0];
+      this.clusteredData.timestep = this.timestep - (this.clusteredData.time_range[0] + 1);
       this.timestep_message = ':)';
       this.set3DGraphNoTime();
     }
@@ -180,8 +180,8 @@ export class GraphComponent implements OnInit {
         this.set3DGraphNoTime();
       } else if (this.clusteredData.graphType == GraphType.Graph_2_Attr) {
         this.set3DGraph();
-      } else if ( this.clusteredData.graphType == GraphType.Graph_1_Attr ) {
-        this.set2DGraph()
+      } else if (this.clusteredData.graphType == GraphType.Graph_1_Attr) {
+        this.set2DGraph();
       }
     });
   }
