@@ -10,9 +10,6 @@ build_ui:
   artifacts:
     paths:
       - UI/dist
-  only:
-    changes:
-      - UI/*
   script:
     - cd UI
     - npm install -g @angular/cli
@@ -37,9 +34,6 @@ test_ui:
 test_api:
   image: python:3
   stage: test_api
-  only:
-    changes:
-      - API/*
   script:
     - cd API
     - pip install -r requirements.txt
