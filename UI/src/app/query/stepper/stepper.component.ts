@@ -15,6 +15,7 @@ import {
   DataProcessors,
   IClusterRequest,
 } from 'src/app/api/models/cluster-request.model';
+import { QueueService } from 'src/app/api/queue.service';
 import { Attribute } from '../../api/models/attribute.model';
 import { QueryService } from '../../api/query.service';
 
@@ -36,22 +37,42 @@ export class StepperComponent implements OnInit {
     ),
     //distFunct: ['', Validators.required],
     algorithm: [null, Validators.required],
-    n_clusters: [null, [Validators.required, Validators.min(0)]],
-    n_samples: [null, [Validators.required, Validators.min(0)]],
-    eps: [null, [Validators.required, Validators.min(0)]],
-    standardizer: [DataProcessors.Standard],
-    temporal_val: [null, {validators: Validators.required, disabled: false}],
-    time_interval: this.fb.array(
-      [this.fb.control({value: null, disabled: true}), this.fb.control({value: null, disabled: true})],
-      Validators.required
-    ),
+    cluster_params: this.fb.group({
+      n_clusters: [null, [Validators.required, Validators.min(0)]],
+      n_samples: [null, [Validators.required, Validators.min(0)]],
+      eps: [null, [Validators.required, Validators.min(0)]],
+      standardizer: [DataProcessors.Standard],
+      temporal_val: [
+        { value: null, disabled: false },
+        {
+          validators: [
+            Validators.required,
+            Validators.compose([Validators.min(0), Validators.max(100)]),
+          ],
+        },
+      ],
+      time_interval: this.fb.array(
+        [
+          this.fb.control({ value: null, disabled: true }, [
+            Validators.required,
+            Validators.compose([Validators.min(0), Validators.max(100)]),
+          ]),
+          this.fb.control({ value: null, disabled: true }, [
+            Validators.required,
+            Validators.compose([Validators.min(0), Validators.max(100)]),
+          ]),
+        ],
+        Validators.required
+      ),
+    }),
   });
 
   constructor(
     private fb: FormBuilder,
     private queryService: QueryService,
     private router: Router,
-    private snack: MatSnackBar
+    private snack: MatSnackBar,
+    private queueService: QueueService
   ) {}
 
   ngOnInit() {}
@@ -71,29 +92,35 @@ export class StepperComponent implements OnInit {
       } else {
         attributes[at] = this.weights.controls[index].value / 100;
       }
-      
     }
 
     let steps = {};
-    if (this.query.get('temporal_val').enabled) {
-      //steps['min'] = steps['max'] = this.query.get('temporal_val').value;
-      steps['min'] = 0;
-      steps['max'] = this.query.get('temporal_val').value;
+    if (this.query.get('cluster_params').get('temporal_val').enabled) {
+      steps['min'] = steps['max'] = this.query
+        .get('cluster_params')
+        .get('temporal_val').value;
+      /* steps['min'] = 0;
+      steps['max'] = this.query.get('temporal_val').value; */
     } else {
-      steps['min'] = this.query.get('time_interval').value[0];
-      steps['max'] = this.query.get('time_interval').value[1];
+      steps['min'] = this.query
+        .get('cluster_params')
+        .get('time_interval').value[0];
+      steps['max'] = this.query
+        .get('cluster_params')
+        .get('time_interval').value[1];
     } //Need to double check how backend needs the time steps to be sent
 
     this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,
-      n_clusters: this.query.get('n_clusters').value,
-      eps: this.query.get('eps').value,
-      n_samples: this.query.get('n_samples').value,
-      standardizer: this.query.get('standardizer').value as DataProcessors,
+      n_clusters: this.query.get('cluster_params').get('n_clusters').value,
+      eps: this.query.get('cluster_params').get('eps').value,
+      n_samples: this.query.get('cluster_params').get('n_samples').value,
+      standardizer: this.query.get('cluster_params').get('standardizer')
+        .value as DataProcessors,
       attributes: attributes,
       database: this.query.get('dbSelect').value as Database,
       time_steps: steps['max'],
-      starting_time_step: steps['min']
+      starting_time_step: steps['min'],
     };
 
     return this.request;
@@ -137,10 +164,11 @@ export class StepperComponent implements OnInit {
   }
 
   onSubmit() {
-    const queryParams = this.queryService.toQueryPararms(
-      this.buildRequestTemplate()
-    );
-    this.router.navigate(['/query/graph'], { queryParams: queryParams });
+    this.queueService
+      .addClusterRequestToQueue(this.buildRequestTemplate())
+      .subscribe((response) => {
+        this.router.navigate(['/home']);
+      });
   }
 
   addAttribute(attribute: Attribute): void {
