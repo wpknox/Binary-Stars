@@ -4,7 +4,7 @@
 <div style="display: flex; margin: 10px auto auto;" *ngIf="_filteredAttributes">
   <div style="flex: 1">
     <h4>({{(_filteredAttributes | async).length}}) Availible Attributes:</h4>
-    <mat-selection-list [(ngModel)]="selectedAvailibleAttributes">
+    <mat-selection-list class="select-list" [(ngModel)]="selectedAvailibleAttributes">
       <mat-list-option class="list-item" *ngFor="let attribute of _filteredAttributes | async" [value]="attribute">
         {{attribute.display_name}}
       </mat-list-option>
@@ -24,7 +24,7 @@
   </div>
   <div style="flex: 1">
     <h4>({{formArray.length}}) Selected Attributes:</h4>
-    <mat-selection-list [(ngModel)]="selectedSelectedAttributes">
+    <mat-selection-list class="selected-list" [(ngModel)]="selectedSelectedAttributes">
       <mat-list-option class="list-item" *ngFor="let attribute of formArray.controls" [value]="attribute.value">
         {{attribute.value.display_name}}
       </mat-list-option>
