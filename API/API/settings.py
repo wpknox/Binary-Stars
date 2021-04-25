@@ -108,7 +108,10 @@ else:
             'USER': os.environ.get('DB_USER'),
             'PASSWORD': os.environ.get('DB_PASSWORD'),
             'HOST': os.environ.get('DB_URL') or 'sdmay21-30.ece.iastate.edu',
-            'PORT': '5432'
+            'PORT': '5432',
+            'TEST': {
+                'NAME': 'test_stardata'
+            }
         }
     }
 

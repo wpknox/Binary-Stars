@@ -1,3 +1,10 @@
-from django.test import TestCase
+from django.test import Client, TestCase
+from binarystars.models import Attribute, ClusterQueue, InterpolatedBinaryStars, BinaryStars
 
-# Create your tests here.
+
+class BinaryStarsTestCase(TestCase):
+    def setUp(self):
+        pass
+
+    def test_kmeans_time_steps(self):
+        assert response.status_code == 200
