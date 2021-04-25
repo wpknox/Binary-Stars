@@ -6,7 +6,7 @@
   <div *ngFor="let att of attributeArray; index as i">
     <mat-form-field>
       <mat-label>{{ att.value.display_name }}</mat-label>
-      <input matInput type="number" [formControl]="weightArray.at(i)" rquired/>
+      <input matInput type="number" [formControl]="weightArray.at(i)" rquired class="cy-weight-{{i}}"/>
     </mat-form-field>
   </div>
 </div>

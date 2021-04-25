@@ -55,7 +55,12 @@ export class ConfigureGraphComponent implements OnInit {
     if(event){
       this.numAttrSelected++;
 
-      if ( this.graphType == GraphType.Graph_2_Attr ){
+      if ( this.graphType == GraphType.Graph_3_Attr ){
+        if( this.numAttrSelected == 3 ){
+          this.disableUncheckedBoxes(true);
+          this.canApply = false;
+        }
+      } else if ( this.graphType == GraphType.Graph_2_Attr ){
         if( this.numAttrSelected == 2 ){
           this.disableUncheckedBoxes(true);
           this.canApply = false;
@@ -68,7 +73,12 @@ export class ConfigureGraphComponent implements OnInit {
       }
     } else {
       this.numAttrSelected--;
-      if ( this.graphType == GraphType.Graph_2_Attr ){
+      if ( this.graphType == GraphType.Graph_3_Attr ){
+        if( this.numAttrSelected == 2 ){
+          this.disableUncheckedBoxes(false);
+          this.canApply = true;
+        }
+      } else if ( this.graphType == GraphType.Graph_2_Attr ){
         if( this.numAttrSelected == 1 ){
           this.disableUncheckedBoxes(false);
           this.canApply = true;

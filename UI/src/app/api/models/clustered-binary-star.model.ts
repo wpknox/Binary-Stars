@@ -9,4 +9,5 @@ export interface ClusterBinaryStar {
 
 export interface ClusterBinaryStarTimesteps {
     timesteps: ClusterBinaryStar[][];
+    start_ts: number;
 }

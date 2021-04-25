@@ -3,6 +3,7 @@ import { ClusterBinaryStar, ClusterBinaryStarTimesteps } from 'src/app/api/model
 export enum GraphType {
   Graph_1_Attr,
   Graph_2_Attr,
+  Graph_3_Attr,
 }
 
 /**
@@ -17,6 +18,8 @@ export class ClusteredData {
 
   jsonData: ClusterBinaryStar[][];
   public graphType: GraphType = 0;
+  public timestep: number;
+  public time_range: number[] = [0,0];
 
   constructor(jsonData: ClusterBinaryStarTimesteps) {
     this.jsonData = jsonData["timesteps"];
@@ -34,6 +37,10 @@ export class ClusteredData {
       }
     }
     this.numClusters++;
+
+    this.timestep = 0;
+    this.time_range[0] = jsonData.start_ts;
+    this.time_range[1] = jsonData.start_ts + this.jsonData.length - 1;
 
     //Set to 2 attribute graph by default
     this.graphType = GraphType.Graph_2_Attr;
@@ -69,7 +76,32 @@ export class ClusteredData {
       colors[i] = 'rgb(' + String(r) +  ', ' + String(g) + ', ' + String(b) + ')';
     }
 
-    if (this.graphType == GraphType.Graph_2_Attr) {
+    if (this.graphType == GraphType.Graph_3_Attr) {
+      for (let i = 0; i < this.numClusters; i++) {
+        data.push({
+          x: [],
+          y: [],
+          z: [],
+          type: 'scatter3d',
+          mode: 'markers',
+          marker: { color: colors[i], size: 2 },
+          name: `Cluster ${i + 1}`,
+        });
+      }
+      for (let j = 0; j < this.jsonData[this.timestep].length; j++) {
+        var clusterNum = this.jsonData[this.timestep][j]['cluster_idx'];
+        data[clusterNum].x.push(
+          this.jsonData[this.timestep][j]['cluster_attributes'][this.selectedAttributes[0]]
+        );
+        data[clusterNum].y.push(
+          this.jsonData[this.timestep][j]['cluster_attributes'][this.selectedAttributes[1]]
+        );
+        data[clusterNum].z.push(
+          this.jsonData[this.timestep][j]['cluster_attributes'][this.selectedAttributes[2]]
+        );
+      }
+      return data;
+    } else if (this.graphType == GraphType.Graph_2_Attr) {
       for (let i = 0; i < this.numClusters; i++) {
         data.push({
           x: [],

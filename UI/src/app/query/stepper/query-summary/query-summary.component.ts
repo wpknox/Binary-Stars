@@ -83,7 +83,7 @@ export class QuerySummaryComponent implements OnInit, OnChanges {
       ? 'min:  ' +
           this.request?.starting_time_step +
           '   |   max:  ' +
-          this.request?.time_steps
+          (this.request?.time_steps + this.request?.starting_time_step)
       : '' + this.request?.time_steps;
   }
 

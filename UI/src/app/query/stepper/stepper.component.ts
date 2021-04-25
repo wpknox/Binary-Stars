@@ -96,9 +96,10 @@ export class StepperComponent implements OnInit {
 
     let steps = {};
     if (this.query.get('cluster_params').get('temporal_val').enabled) {
-      steps['min'] = steps['max'] = this.query
+      steps['min'] = this.query
         .get('cluster_params')
         .get('temporal_val').value;
+      steps['max'] = 1;
       /* steps['min'] = 0;
       steps['max'] = this.query.get('temporal_val').value; */
     } else {
@@ -107,8 +108,13 @@ export class StepperComponent implements OnInit {
         .get('time_interval').value[0];
       steps['max'] = this.query
         .get('cluster_params')
-        .get('time_interval').value[1];
+        .get('time_interval').value[1] - steps['min'];
     } //Need to double check how backend needs the time steps to be sent
+
+    //if the user adds bad input, just do a single timestep
+    if( this.query.get('cluster_params').get('time_interval').value[1] < steps['min'] ){
+      steps['min'] = steps['max'] = 1;
+    }
 
     this.request = <IClusterRequest>{
       cluster_type: this.query.get('algorithm').value as ClusterType,
