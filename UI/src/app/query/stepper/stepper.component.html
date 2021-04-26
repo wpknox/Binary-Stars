@@ -7,7 +7,8 @@
           <ng-template matStepLabel>Choose DB</ng-template>
           <app-db [fc]="query.get('dbSelect')"></app-db>
           <div>
-            <button mat-raised-button matStepperNext type="button" color="primary">
+            <button mat-raised-button matStepperNext type="button" color="primary"
+            [disabled]="query.get('dbSelect').errors?.required">
               Next
             </button>
           </div>
