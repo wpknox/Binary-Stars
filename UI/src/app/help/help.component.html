@@ -1,30 +1,47 @@
-<h1>Stellar-Evolution-Clustering | How to Use the Application</h1>
+<h1>Stellar-Evolution-Clustering | User Manual </h1>
+
+<div>
+  <h2>Home Page</h2>
+  <div>
+    <p>The home page is the entry point for the application. The home page contains a list of saved user queries. After submitting a query, it is automatically saved to this list.</p>
+    <img class="image" src="assets/images/help/home.PNG" alt="Home Page"/>
+  </div>
+</div>
 
 <div>
   <h2>Query Form</h2>
   <div>
-    <p>1. Any clustering begins by filling out the query form</p>
-    <img class="image" src="assets/images/home_page.PNG" alt="Home Page"/>
+    <p>1. The first step when creating a query is selecting the database. Two databases are implemented for this version, COSMIC and POSYDON. </p>
+    <img class="image" src="assets/images/help/db.PNG" alt="Query Page, db select" style="width: 30%;"/>
   </div>
   <div>
-    <p>2. The first item on the form is the selection of attributes</p>
-    <img class="image" src="assets/images/query_attr.PNG" alt="Query Page, attribute select"/>
+    <p>2. The second step is to select the attributes to cluster with. At least one attribute is required.</p>
+    <img class="image" src="assets/images/help/attribute.PNG" alt="Query Page, attribute select"/>
   </div>
   <div>
-    <p>3. Select the attributes you'd wish to cluster by, and add them to the right hand side</p>
-    <img class="image" src="assets/images/query_attr_2.PNG" alt="Query Page, attribute select 2"/>
+    <p>
+      3. Third, attributes can be weighted. The larger the weight of an attribute, the more clustering will consider it.
+      The sum of weights must add to 100. Selecting “Allow empty inputs” will evenly weight all attributes.
+    </p>
+    <img class="image" src="assets/images/help/weight.PNG" alt="Query Page, weight select"/>
   </div>
   <div>
-    <p>4. Next, define weights for each attribute. The larger the value, the more that attribute will effect clustering. The weights should add to 1.00</p>
-    <img class="image" src="assets/images/query_weight.PNG" alt="Query Page, weight select"/>
+    <p>
+      4. Fourth, the user can select which clustering algorithm to use. The two algorithms, K-Means and DBScan,
+      each have their own pros and cons. More detail is located in the About Page.
+    </p>
+    <img class="image" src="assets/images/help/cluster_method.PNG" alt="Query Page, cluster method select"  style="width: 50%;"/>
   </div>
   <div>
-    <p>5. Select the cluster method you'd like to use. The two clustering methods provided are K-means and DBScan</p>
-    <img class="image" src="assets/images/query_cluster_method.PNG" alt="Query Page, cluster method select"/>
+    <p>
+      5. Fifth, based on the clustering algorithm selected, users may need to provide additional parameters.
+      For example, for K-Means users need to specify the number of clusters.
+    </p>
+    <img class="image" src="assets/images/help/additional_param.PNG" alt="Query Page, additional params" style="width: 80%;"/>
   </div>
   <div>
-    <p>6. Finally, review the clustering form and submit to visualize the data</p>
-    <img class="image" src="assets/images/query_review_and_submit.PNG" alt="Query Page, review and submit"/>
+    <p>6. Lastly, users can review all input into the form. When satisfied, the query can be submitted to the backend.</p>
+    <img class="image" src="assets/images/help/review_and_submit.PNG" alt="Query Page, review and submit"/>
   </div>
 </div>
 
@@ -32,16 +49,36 @@
   <h2>Cluster Visualization</h2>
   <div>
     <p>
-      1. After submiting a query form, the selected atrributes will be pulled from the database and clustered. Here are the three attributes plotted on a 3D graph.
+      After a query submission, users can visualize their data with 2D and 3D graphs. The default graph on query submission is the two-attribute display over time.
     </p>
-    <img class="image" src="assets/images/graph_3D.PNG" alt="Home Page"/>
+    <img class="image" src="assets/images/help/2_attribute.PNG" alt="Home Page"/>
   </div>
   <div>
-    <p>2. Users will have the ability to view this data either 3 attributes at a time (3D graph), 2 attributes at a time (2D graph), or 1 attribute at a time (One Attribute Over Time).    </p>
-    <img class="image" src="assets/images/graph_configure.PNG" alt="Home Page"/>
+    <p>
+      The user can select different combinations of attributes to display using the configure button. The type of graph can also change.
+      The following are possible graphs: One attribute over time on a 2D graph, two attributes over time on a 3D graph, or three attributes
+      at single time steps on a 3D graph.
+    </p>
+    <img class="image" src="assets/images/help/configure.PNG" alt="Home Page" style="width: 20%;"/>
   </div>
   <div>
-    <p>3. Clusters can be toggled on and off. Other graph tools, such as zooming and highlighting is available in the graph tool bar</p>
-    <img class="image" src="assets/images/graph_toggle_clusters.PNG" alt="Home Page"/>
+    <p>One attribute over time on a 2D graph: </p>
+    <img class="image" src="assets/images/help/1_attribute.PNG" alt="Home Page" style="width: 60%;"/>
+  </div>
+  <div>
+    <p>Three attributes at single time steps on a 3D graph:</p>
+    <img class="image" src="assets/images/help/3_attribute.PNG" alt="Home Page"/>
+  </div>
+  <div>
+    <p>
+      Users can move the time step up and down to view how clusters change over time (Notice that Timestep has changed from 7 to 8).
+    </p>
+    <img class="image" src="assets/images/help/3_attribute_with_new_timestep.PNG" alt="Home Page"/>
+  </div>
+  <div>
+    <p>
+      Clusters can be toggled on and off. Other graph tools, such as zooming and highlighting is available in the graph tool bar.
+    </p>
+    <img class="image" src="assets/images/help/toggle_clusters.PNG" alt="Home Page"/>
   </div>
 </div>
